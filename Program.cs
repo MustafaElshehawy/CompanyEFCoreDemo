@@ -9,6 +9,11 @@ using var context = new CompanyDbContext();
 context.Database.EnsureCreated();
 //InsertData(context);
 //ReadEmployees(context);
+//ReadEmployeesWithDepartment(context);
+UpdateEmployee(context,1);
+UpdateEmployee(context,2,"mostafa");
+UpdateEmployee(context,3,"mohmmed",20);
+UpdateEmployee(context, 4, departmentId: 1);
 ReadEmployeesWithDepartment(context);
 
 
@@ -67,7 +72,7 @@ static void ReadEmployees(CompanyDbContext context)
 
     foreach (var employee in Employee)
     {
-        Console.WriteLine($"Name: {employee.Name} Age:{employee.Salary} Salary: {employee.Salary} EGP");
+        Console.WriteLine($"Name: {employee.Name} Age:{employee.Age} Salary: {employee.Salary} EGP");
     }
 }
 
@@ -78,8 +83,29 @@ static void ReadEmployeesWithDepartment(CompanyDbContext context)
         .ToList();
     foreach (var employee in Employees)
     {
-        Console.WriteLine($"Name: {employee.Name} Age:{employee.Salary} Department: {employee.Department.Name} Location: {employee.Department.Location} Salary: {employee.Salary} EGP");
+        Console.WriteLine($"Name: {employee.Name} Age:{employee.Age} Department: {employee.Department.Name} Location: {employee.Department.Location} Salary: {employee.Salary} EGP");
 
+    }
+
+}
+
+static void UpdateEmployee(CompanyDbContext context,int employeeId,string? name =null, int? age=null, decimal? salary = null, int? departmentId = null)
+{
+    var Employee = context.Employees.FirstOrDefault(e => e.Id == employeeId);
+
+    if (Employee == null)
+    {
+        Console.WriteLine("Employee not found");
+        return;
+    }
+    else
+    {
+        Employee.Name = !string.IsNullOrWhiteSpace(name) ? name: Employee.Name ;
+        Employee.Age = age ?? Employee.Age;
+        Employee.Salary = salary ?? Employee.Salary;
+        Employee.DepartmentId = departmentId ?? Employee.DepartmentId;
+        context.SaveChanges();
+        Console.WriteLine("Employee update success");
     }
 
 }
