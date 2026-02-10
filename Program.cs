@@ -8,7 +8,8 @@ using var context = new CompanyDbContext();
 
 context.Database.EnsureCreated();
 //InsertData(context);
-ReadEmployees(context);
+//ReadEmployees(context);
+ReadEmployeesWithDepartment(context);
 
 
 
@@ -65,7 +66,20 @@ static void ReadEmployees(CompanyDbContext context)
     var Employee = context.Employees.ToList();
 
     foreach (var employee in Employee)
-    { 
+    {
         Console.WriteLine($"Name: {employee.Name} Age:{employee.Salary} Salary: {employee.Salary} EGP");
     }
+}
+
+static void ReadEmployeesWithDepartment(CompanyDbContext context)
+{
+    var Employees = context.Employees
+        .Include(e => e.Department)
+        .ToList();
+    foreach (var employee in Employees)
+    {
+        Console.WriteLine($"Name: {employee.Name} Age:{employee.Salary} Department: {employee.Department.Name} Location: {employee.Department.Location} Salary: {employee.Salary} EGP");
+
+    }
+
 }
