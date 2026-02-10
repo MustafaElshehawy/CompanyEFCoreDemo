@@ -7,19 +7,21 @@ using Microsoft.EntityFrameworkCore;
 using var context = new CompanyDbContext();
 
 context.Database.EnsureCreated();
-InsertData(context);
+//InsertData(context);
+ReadEmployees(context);
+
 
 
 static void InsertData(CompanyDbContext context)
 {
-    var DepartmentData =new List<Department>
+    var DepartmentData = new List<Department>
     {
             new Department { Name = "IT", Location = "Cairo" },
             new Department { Name = "HR", Location = "Mansoura" },
             new Department { Name = "BackEnd", Location = "Mansoura" },
             new Department { Name = "UIUX", Location = "Mansoura" }
     };
-    var EmployeeData =new List<Employee>
+    var EmployeeData = new List<Employee>
     {
             new Employee { Name = "Ali", Age = 35, Salary = 28000, DepartmentId = 1 },
             new Employee { Name = "Hassan", Age = 30, Salary = 18000, DepartmentId = 2 },
@@ -55,4 +57,15 @@ static void InsertData(CompanyDbContext context)
 
     context.AddRange(EmployeeProjectData);
     context.SaveChanges();
+}
+
+
+static void ReadEmployees(CompanyDbContext context)
+{
+    var Employee = context.Employees.ToList();
+
+    foreach (var employee in Employee)
+    { 
+        Console.WriteLine($"Name: {employee.Name} Age:{employee.Salary} Salary: {employee.Salary} EGP");
+    }
 }
